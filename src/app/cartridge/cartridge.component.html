@@ -1,3 +1,15 @@
-<div>
-    <img src="/pokemon.jpg" alt="">
+<div class="rounded-b-md rounded-t-2xl">
+    <div class="flex w-full flex-col items-center gap-5 bg-gray-400 px-6 pt-6 pb-6 rounded-b-md rounded-t-2xl shadow-[inset_3px_3px_4px_rgba(255,255,255,0.45),inset_-4px_-4px_6px_rgba(0,0,0,0.3)]"
+    >
+        <div class="h-12 w-full rounded-md bg-linear-380 from-gray-400 to-gray-500 border border-gray-500 shadow-[inset_2.5px_5px_5px_rgba(0,0,0,0.35)]"></div>
+
+        <div
+            class="w-full rounded-md bg-gray-500 p-1.5 shadow-[inset_2px_3px_5px_rgba(0,0,0,0.5),inset_-1px_-1px_2px_rgba(255,255,255,0.3)]">
+            <div class="flex aspect-square w-full flex-col overflow-hidden rounded-sm bg-white shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
+                <img class="h-full w-full object-cover" [src]="portada()" [alt]="'Etiqueta de ' + titulo()" draggable="false">
+            </div>
+        </div>
+
+        <div class="mt-2 self-start size-0 border-x-10 border-x-transparent border-t-14 border-t-gray-500"></div>
+    </div>
 </div>

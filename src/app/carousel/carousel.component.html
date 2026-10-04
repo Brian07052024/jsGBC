@@ -1,0 +1,71 @@
+<section class="carrusel" [class.bloqueado]="!activo()" aria-label="Seleccion de juego">
+
+  <div class="resplandor" [style.--acento]="juego().acento"></div>
+
+  <div class="pista"
+       [class.arrastrando]="arrastrando()"
+       (wheel)="rueda($event)"
+       (pointerdown)="inicioArrastre($event)"
+       (pointermove)="moviendo($event)"
+       (pointerup)="finArrastre()"
+       (pointercancel)="finArrastre()"
+       (pointerleave)="finArrastre()">
+
+    @for (tarjeta of tarjetas(); track tarjeta.juego.id) {
+      <button type="button"
+              class="tarjeta"
+              [class.activa]="tarjeta.activa"
+              [class.insertando]="tarjeta.activa && insertando()"
+              [style.transform]="tarjeta.transform"
+              [style.filter]="tarjeta.filtro"
+              [style.opacity]="tarjeta.opacidad"
+              [style.zIndex]="tarjeta.z"
+              [style.visibility]="tarjeta.visible ? 'visible' : 'hidden'"
+              [attr.tabindex]="tarjeta.activa ? 0 : -1"
+              [attr.aria-current]="tarjeta.activa"
+              [attr.aria-label]="tarjeta.activa ? 'Insertar ' + tarjeta.juego.titulo : 'Ver ' + tarjeta.juego.titulo"
+              (click)="clicTarjeta(tarjeta)">
+        <app-cartridge [portada]="tarjeta.juego.portada" [titulo]="tarjeta.juego.titulo" />
+        <span class="brillo" aria-hidden="true"></span>
+      </button>
+    }
+
+    <div class="sombra" aria-hidden="true"></div>
+  </div>
+
+  <button type="button" class="flecha izquierda" (click)="mover(-1)" aria-label="Juego anterior">{{"<"}}</button>
+  <button type="button" class="flecha derecha" (click)="mover(1)" aria-label="Juego siguiente">{{">"}}</button>
+
+  <div class="ficha">
+    @for (g of [juego()]; track g.id) {
+      <div class="datos" [style.--acento]="g.acento">
+        <h2>{{ g.titulo }}</h2>
+        <p>{{ g.genero }} <span class="punto">&bull;</span> {{ g.anio }}</p>
+        @if (!g.rom) {
+          <span class="aviso">ROM no incluida</span>
+        }
+      </div>
+    }
+
+    <button type="button"
+            class="insertar"
+            [style.--acento]="juego().acento"
+            [disabled]="insertando()"
+            (click)="insertar()">
+      {{ insertando() ? 'Insertando...' : 'Insertar cartucho' }}
+    </button>
+
+    <div class="puntos" role="tablist">
+      @for (g of juegos(); track g.id; let i = $index) {
+        <button type="button"
+                class="punto-nav"
+                [class.on]="i === indice()"
+                [style.--acento]="g.acento"
+                [attr.aria-label]="g.titulo"
+                [attr.aria-selected]="i === indice()"
+                role="tab"
+                (click)="irA(i)"></button>
+      }
+    </div>
+  </div>
+</section>

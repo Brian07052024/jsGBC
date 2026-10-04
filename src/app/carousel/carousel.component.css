@@ -1,0 +1,280 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.carrusel {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
+  user-select: none;
+}
+
+.carrusel.bloqueado {
+  pointer-events: none;
+}
+
+.pista {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 380px;
+  transform-style: preserve-3d;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.pista.arrastrando {
+  cursor: grabbing;
+}
+
+.resplandor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 44%,
+    color-mix(in srgb, var(--acento, #f5c518) 42%, transparent) 0%,
+    transparent 52%
+  );
+  opacity: 0.45;
+  transition: background 0.6s ease;
+}
+
+.sombra {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  z-index: 0;
+  width: 280px;
+  height: 40px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.65) 0%, transparent 70%);
+  filter: blur(6px);
+}
+
+.tarjeta {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 230px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform, filter, opacity;
+  transition:
+    transform 0.62s cubic-bezier(0.22, 0.9, 0.26, 1),
+    filter 0.5s ease,
+    opacity 0.5s ease;
+}
+
+.pista.arrastrando .tarjeta {
+  transition: none;
+}
+
+.tarjeta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 6px;
+  border-radius: 14px;
+}
+
+.tarjeta.activa app-cartridge {
+  display: block;
+  animation: flotar 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.55));
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* .brillo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 14px;
+  opacity: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 36%,
+    rgba(255, 255, 255, 0.38) 48%,
+    transparent 60%
+  );
+} */
+
+.tarjeta.activa .brillo {
+  animation: barrido 5s ease-in-out infinite;
+}
+
+@keyframes barrido {
+  0%, 55% { opacity: 0; transform: translateX(-110%); }
+  65% { opacity: 1; }
+  85%, 100% { opacity: 0; transform: translateX(110%); }
+}
+
+
+.tarjeta.insertando {
+  animation: insertar 0.82s cubic-bezier(0.55, 0, 0.35, 1) forwards;
+}
+
+.tarjeta.insertando app-cartridge,
+.tarjeta.insertando .brillo {
+  animation: none;
+}
+
+@keyframes insertar {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  28% { transform: translate(-50%, -44%) scale(1.07) rotateX(-6deg); }
+  100% { transform: translate(-50%, -175%) scale(0.46) rotateX(22deg); opacity: 0; }
+}
+
+.pista:has(.insertando) .tarjeta:not(.insertando) {
+  opacity: 0 !important;
+  filter: blur(8px) !important;
+}
+
+.flecha {
+  position: absolute;
+  top: 42%;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e5e7eb;
+  font-size: 18px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.flecha:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  transform: scale(1.12);
+}
+
+.flecha:active { transform: scale(0.95); }
+.flecha.izquierda { left: clamp(12px, 6vw, 90px); }
+.flecha.derecha { right: clamp(12px, 6vw, 90px); }
+
+.ficha {
+  position: relative;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 28px;
+  text-align: center;
+}
+
+.datos {
+  animation: subir 0.45s cubic-bezier(0.22, 0.9, 0.26, 1) both;
+}
+
+@keyframes subir {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.datos h2 {
+  margin: 0;
+  /* font-family: ui-monospace, "Courier New", monospace; */
+  font-size: clamp(18px, 2.4vw, 26px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--acento) 70%, transparent);
+}
+
+.datos p {
+  margin: 6px 0 0;
+  /* font-family: ui-monospace, "Courier New", monospace; */
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.punto { color: var(--acento); }
+
+.aviso {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 2px 8px;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 4px;
+  /* font-family: ui-monospace, "Courier New", monospace; */
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fbbf24;
+}
+
+.insertar {
+  padding: 10px 26px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--acento);
+  color: #1f2937;
+  /* font-family: ui-monospace, "Courier New", monospace; */
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 5px 0 color-mix(in srgb, var(--acento) 55%, #000),
+    0 10px 20px rgba(0, 0, 0, 0.45);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.4s ease;
+}
+
+.insertar:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--acento) 55%, #000);
+}
+
+.insertar:disabled { opacity: 0.6; cursor: default; }
+
+.puntos { display: flex; gap: 8px; }
+
+.punto-nav {
+  width: 22px;
+  height: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.punto-nav.on {
+  width: 34px;
+  background: var(--acento);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta,
+  .tarjeta.activa app-cartridge,
+  .tarjeta.activa .brillo,
+  .datos {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
+}

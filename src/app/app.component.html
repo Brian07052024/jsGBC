@@ -1,5 +1,14 @@
-<div class="h-dvh  bg-gray-800">
-    <div class="w-full h-full relative flex justify-center items-center">
-        <app-gameboy></app-gameboy>
+<div class="escena" [class.jugando]="jugando()">
+
+    <div class="capa-consola">
+        <app-gameboy [rom]="elegido()?.rom ?? null" [insertado]="jugando()" />
     </div>
+
+    <div class="capa-selector" [attr.aria-hidden]="jugando()" [attr.inert]="jugando() ? '' : null">
+        <app-carousel [juegos]="juegos" [activo]="!jugando()" (seleccionar)="insertar($event)" />
+    </div>
+
+    @if (jugando()) {
+        <button type="button" class="expulsar" (click)="expulsar()">&#9668; Cambiar juego</button>
+    }
 </div>
